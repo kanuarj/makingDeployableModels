@@ -5,12 +5,16 @@ with open('./savedModels/tokenizer.pkl', 'rb') as handle:
 from tensorflow.keras.models import load_model
 model = load_model('./savedModels/model.h5')
 
-from tensorflow.keras.preprocessing.sequences import pad_sequences
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/', methods=['POST'])
+@cross_origin()
 def basic():
     text = request.json['text']
     X_test = tokenizer.texts_to_sequences([text])
